@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class CalculateViewController: UIViewController {
     
     var hSliderValue = 1.0
     var wSliderValue = 60
@@ -45,9 +45,15 @@ class ViewController: UIViewController {
     }
     
     func calculateBMI(){
-        bmiValue = Double(wSliderValue) / (hSliderValue*hSliderValue)
+        bmiValue = Double(wSliderValue) / pow(hSliderValue, 2)
         
         print(bmiValue)
+        
+        let SecondVC = SecondViewController()
+        
+        SecondVC.bmiValue = String(format: "%.1f", bmiValue)
+        
+        self.present(SecondVC, animated: true)
     }
 }
 
