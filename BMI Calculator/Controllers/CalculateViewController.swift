@@ -46,14 +46,14 @@ class CalculateViewController: UIViewController {
     
     func calculateBMI(){
         bmiValue = Double(wSliderValue) / pow(hSliderValue, 2)
-        
-        print(bmiValue)
-        
-        let SecondVC = SecondViewController()
-        
-        SecondVC.bmiValue = String(format: "%.1f", bmiValue)
-        
-        self.present(SecondVC, animated: true)
+        self.performSegue(withIdentifier: "goToResult", sender: self)
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "goToResult"{
+            let destinationVC = segue.destination as! ResultViewController
+            destinationVC.bmiValue = String(format: "%.1f", bmiValue)
+        }
     }
 }
 
