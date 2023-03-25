@@ -10,9 +10,8 @@ import UIKit
 
 class CalculateViewController: UIViewController {
     
-    var hSliderValue = 1.0
-    var wSliderValue = 60
-    var bmiValue = 0.0
+    var calculatorBrain = CalculatorBrain()
+    
 
     @IBOutlet weak var weightValue: UILabel!
     @IBOutlet weak var heightSlider: UISlider!
@@ -21,38 +20,33 @@ class CalculateViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setSliderValue()
-        weightSlider.value = Float(wSliderValue)
-        heightSlider.value = Float(hSliderValue)
+//        setSliderValue()
+//        weightSlider.value = Float(wSliderValue!)
+//        heightSlider.value = Float(hSliderValue!)
     }
     
     @IBAction func heightSlider(_ sender: UISlider) {
-        hSliderValue = Double(String(format: "%.2f", sender.value)) ?? 0
-        setSliderValue()
+        let hSliderValue = String(format: "%.2f", sender.value)
+        heightValue.text = "\(hSliderValue)" + "m"
     }
     
     @IBAction func weightSlider(_ sender: UISlider) {
-        wSliderValue = Int(sender.value)
-        setSliderValue()
-    }
-    
-    func setSliderValue() {
-        heightValue.text = "\(hSliderValue)" + "m"
+        let wSliderValue = Int(sender.value)
         weightValue.text = "\(wSliderValue)" + "Kg"
     }
-    @IBAction func calculatePressed(_ sender: UIButton) {
-        calculateBMI()
-    }
     
-    func calculateBMI(){
-        bmiValue = Double(wSliderValue) / pow(hSliderValue, 2)
+    @IBAction func calculatePressed(_ sender: UIButton){
+        calculatorBrain.calculateBMI(height: heightSlider.value, weight: Int(weightSlider.value))
+        
         self.performSegue(withIdentifier: "goToResult", sender: self)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "goToResult"{
             let destinationVC = segue.destination as! ResultViewController
-            destinationVC.bmiValue = String(format: "%.1f", bmiValue)
+            destinationVC.bmiValue = calculatorBrain.getBmiValue()
+            destinationVC.advice = calculatorBrain.getAdvice()
+            destinationVC.color = calculatorBrain.getColor()
         }
     }
 }
